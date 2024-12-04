@@ -17,7 +17,7 @@ class SongView(ViewSet):
         """
         try:
             song = Song.objects.get(pk=pk)
-            serializer = SongSerializer(song)
+            serializer = SingleSongSerializer(song)
             return Response(serializer.data)
         except Song.DoesNotExist as ex:
             return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
@@ -82,3 +82,11 @@ class SongSerializer(serializers.ModelSerializer):
         model = Song
         fields = ('id', 'title', 'artist_id', 'album', 'length')
         depth = 1
+
+class SingleSongSerializer(serializers.ModelSerializer):
+  """JSON serializer for song types
+    """
+  class Meta:
+      model = Song
+      fields = ('id', 'title', 'artist_id', 'album', 'length', 'genres')
+      depth = 2
