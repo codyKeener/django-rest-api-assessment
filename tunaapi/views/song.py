@@ -18,10 +18,7 @@ class SongView(ViewSet):
         try:
             song = Song.objects.get(pk=pk)
             genres = Genre.objects.filter(songgenres__song_id=song)
-            song_genres = []
-            for genre in genres:
-                song_genres.append(genre)
-            song.genres=song_genres
+            song.genres=genres.all()
             serializer = SingleSongSerializer(song)
             return Response(serializer.data)
         except Song.DoesNotExist as ex:
@@ -91,10 +88,6 @@ class SongSerializer(serializers.ModelSerializer):
 class SingleSongSerializer(serializers.ModelSerializer):
   """JSON serializer for song types
     """
-  genres = serializers.ModelSerializer()
-  class genres:
-      model = Genre
-      fields = ('id', 'description')
   class Meta:
       model = Song
       fields = ('id', 'title', 'artist_id', 'album', 'length', 'genres')
