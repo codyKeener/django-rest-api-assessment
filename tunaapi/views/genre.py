@@ -17,7 +17,7 @@ class GenreView(ViewSet):
         """
         try:
             genre = Genre.objects.get(pk=pk)
-            serializer = GenreSerializer(genre)
+            serializer = SingleGenreSerializer(genre)
             return Response(serializer.data)
         except Genre.DoesNotExist as ex:
             return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
@@ -74,3 +74,12 @@ class GenreSerializer(serializers.ModelSerializer):
         model = Genre
         fields = ('id', 'description')
         depth = 1
+
+class SingleGenreSerializer(serializers.ModelSerializer):
+    """JSON serializer for genre types
+    """
+    class Meta:
+        model = Genre
+        fields = ('id', 'description', 'songs')
+        depth = 2
+        
