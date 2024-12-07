@@ -3,7 +3,7 @@ from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
-from tunaapi.models import Song, Artist
+from tunaapi.models import Song, Artist, Genre
 
 
 class SongView(ViewSet):
@@ -17,6 +17,8 @@ class SongView(ViewSet):
         """
         try:
             song = Song.objects.get(pk=pk)
+            genres = Genre.objects.filter(songgenres__song_id=song)
+            song.genres=genres.all()
             serializer = SingleSongSerializer(song)
             return Response(serializer.data)
         except Song.DoesNotExist as ex:
@@ -90,3 +92,4 @@ class SingleSongSerializer(serializers.ModelSerializer):
       model = Song
       fields = ('id', 'title', 'artist_id', 'album', 'length', 'genres')
       depth = 2
+      
