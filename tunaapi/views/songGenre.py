@@ -55,8 +55,8 @@ class SongGenreView(ViewSet):
         Returns:
             Response -- Empty body with 204 status code
         """
-        songId = Song.objects.get(pk=request.data["song_id"])
-        genreId = Genre.objects.get(pk=request.data["genre_id"])
+        songId = Song.objects.get(pk=request.data["song"])
+        genreId = Genre.objects.get(pk=request.data["genre"])
         
         songGenre = SongGenre.objects.get(pk=pk)
         songGenre.song_id = songId
@@ -78,5 +78,5 @@ class SongGenreSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = SongGenre
-        fields = ('id', 'song_id', 'genre_id' )
+        fields = ('id', 'song', 'genre' )
         depth = 1
